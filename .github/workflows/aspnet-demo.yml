@@ -38,20 +38,7 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        # ClientId of the Azure Service principal created.
-        client-id: ${{ secrets.CLIENT_ID }}
-        # TenantId of the Azure Service principal created.
-        tenant-id: ${{ secrets.TENANT_ID }}
-        # Azure subscriptionId
-        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-        # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
-        #enable-AzPSSession: # optional
-        # Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
-        #environment: # optional, default is azurecloud
-        # Set this value to true to enable support for accessing tenants without subscriptions
-        #allow-no-subscriptions: # optional
-        # Provide audience field for access-token. Default value is api://AzureADTokenExchange
-        #audience: # optional, default is api://AzureADTokenExchange
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
