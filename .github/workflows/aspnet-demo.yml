@@ -38,10 +38,10 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        credentials: ${{ secrets.AZURE_CREDENTIALS }}
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        credentials: ${{ secrets.AZURE_CREDENTIALS }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
