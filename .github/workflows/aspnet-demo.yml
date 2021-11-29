@@ -45,4 +45,3 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
