@@ -35,13 +35,13 @@ jobs:
     runs-on: ubuntu-18.04
     name: Deploy Web App
     steps:
-#    - name: azure-resource-login
-#      uses: Azure/azure-resource-login-action@v1.0.0
-#      with:
+    - name: azure-resource-login
+      uses: Azure/azure-resource-login-action@v1.0.0
+      with:
         # Azure credentials for the service principal to log in
-#        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         # Canonical resource url for what you want the token for
-#        resource-type-name: Microsoft.Web
+        resource-type-name: Microsoft.Web
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
