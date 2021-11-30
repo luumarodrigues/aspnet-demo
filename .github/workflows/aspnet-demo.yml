@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: terraform
-        path: appservice/
+        path: WebApp/
 
   deploy-IaC:
     name: Deploy Infra
