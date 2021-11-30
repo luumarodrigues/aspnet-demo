@@ -38,8 +38,31 @@ jobs:
   deploy:
     needs: [build]
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: /WebApp/main.tf
     name: Deploy Web App
     steps:
+    - uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: false
+      
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan
+      continue-on-error: false
+
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
