@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-18.04
     defaults:
       run:
-        working-directory: /WebApp/main.tf
+        working-directory: ./WebApp/main.tf
     name: Deploy Web App
     steps:
     - uses: hashicorp/setup-terraform@v1
