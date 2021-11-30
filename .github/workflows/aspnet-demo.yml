@@ -1,4 +1,4 @@
-name: Demo Aspnet
+name: Demo Web App
 
 on:
   push:
@@ -35,13 +35,13 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: output/
+        path: '${{ github.workspace }}//output'
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: terraform
-        path: WebApp/
+        path: '${{ github.workspace }}//WebApp'
 
   deploy-IaC:
     name: Deploy Infra
@@ -49,7 +49,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: /WebApp
+        working-directory: ${{ github.workspace }}/WebApp
 
     env:
       ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
@@ -66,7 +66,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: terraform
-        path: /WebApp
+        path: ${{ github.workspace }}//WebApp
 
     - uses: hashicorp/setup-terraform@v1
     - name: Terraform fmt
@@ -93,7 +93,7 @@ jobs:
       continue-on-error: false
 
   deploy:
-    needs: [deploy-IaC]
+    needs: deploy-IaC
     runs-on: ubuntu-18.04
     name: Deploy Web App
     steps:
@@ -102,7 +102,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact
-        path: output/
+        path: '${{ github.workspace }}//output'
 
     - name: Azure Login
       uses: Azure/login@v1
@@ -113,4 +113,4 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: '/output'
+        package: '${{ github.workspace }}//output'
