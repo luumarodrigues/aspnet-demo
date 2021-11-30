@@ -27,3 +27,4 @@ resource "azurerm_app_service_plan" "appserviceplan" {
     tier = "Free"
     size = "F1"
   }
+}
