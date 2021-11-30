@@ -43,6 +43,8 @@ jobs:
         working-directory: ./WebApp/main.tf
     name: Deploy Web App
     steps:
+    - name: "Checkout"
+      uses: actions/checkout@master
     - uses: hashicorp/setup-terraform@v1
 
     - name: Terraform fmt
