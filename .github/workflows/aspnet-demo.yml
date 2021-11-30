@@ -43,7 +43,7 @@ jobs:
     - name: "Checkout"
       uses: actions/checkout@master
     - name: run ls
-      run: ls
+      run: cd WebApp
       
     - uses: hashicorp/setup-terraform@v1
 
@@ -51,12 +51,10 @@ jobs:
       id: fmt
       run: terraform fmt -check
       continue-on-error: false
-      working-directory: ./WebApp/main.tf
       
     - name: Terraform Init
       id: init
       run: terraform init
-      working-directory: ./WebApp/main.tf
 
     - name: Terraform Validate
       id: validate
