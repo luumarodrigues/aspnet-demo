@@ -11,16 +11,29 @@ jobs:
   deploy-iac:
     runs-on: ubuntu-18.04
     name: Deploy IAC
+
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}//appservice
+    
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.STORAGE_CONNSTRING }}   
+      
+    environment: prd
     steps:
     - name: "Checkout"
       uses: actions/checkout@master
     - uses: hashicorp/setup-terraform@v1
 
-    - name: Upload Artfact
-      uses: actions/upload-artifact@v1
-      with:
-        name: terraform
-        path: ${{ github.workspace}}//WebApp
+#    - name: Upload Artfact
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: terraform
+#        path: ${{ github.workspace}}//WebApp
 
     - name: Terraform fmt
       id: fmt
@@ -33,9 +46,14 @@ jobs:
 
     - name: Terraform Validate
       id: validate
-      run: terraform validate
+      run: terraform validate -no-color
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan
+      run: terraform plan -no-color -lock=false
+      continue-on-error: false
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve -lock=false
       continue-on-error: false

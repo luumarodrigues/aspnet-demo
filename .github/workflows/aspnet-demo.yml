@@ -8,52 +8,109 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: Demo-GithubActions    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
 
 
 jobs:
   build:
-    
-    runs-on: ubuntu-latest
     name: Build
-
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build 
       run: dotnet build --configuration Release --no-restore
+
     - name: dotnet publish
-      run: dotnet publish -c Release -o '${{env.AZURE_WEBAPP_PACKAGE_PATH}}/output'
+      run: dotnet publish -c Release -o ${{ github.workspace }}/output'
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: artifact
         path: output/
 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: terraform
+        path: appservice/
+
+  deploy-IaC:
+    name: Deploy Infra
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: /appservice
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}
+
+    environment:
+      name: dev
+
+    needs: build
+    steps:
+      - name: Download Terraform
+        uses: actions/download-artifact@v2
+        with:
+          name: terraform
+          path: /appservice
+
+    - uses: hashicorp/setup-terraform@v1
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: false
+      
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color -lock=false
+      continue-on-error: false
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve -lock=false
+      continue-on-error: false
+
   deploy:
-    needs: [build]
+    needs: [deploy-IaC]
     runs-on: ubuntu-18.04
     name: Deploy Web App
     steps:
+
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
         name: artifact
         path: output/
+
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
-        #enable-AzPSSession: true
+
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: '${{env.AZURE_WEBAPP_PACKAGE_PATH}}/output'
+        package: '/output'
