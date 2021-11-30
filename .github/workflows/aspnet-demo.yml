@@ -64,9 +64,9 @@ jobs:
     steps:
     - name: Download Terraform
       uses: actions/download-artifact@v2
-        with:
-          name: terraform
-          path: /appservice
+      with:
+        name: terraform
+        path: /appservice
 
     - uses: hashicorp/setup-terraform@v1
     - name: Terraform fmt
