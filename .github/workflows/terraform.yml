@@ -13,7 +13,6 @@ env:
 
 jobs:
   deploy-iac:
-    needs: [build]
     runs-on: ubuntu-18.04
     name: Deploy Web App
     steps:
