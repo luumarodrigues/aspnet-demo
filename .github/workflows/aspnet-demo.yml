@@ -38,9 +38,6 @@ jobs:
   deploy:
     needs: [build]
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: ./WebApp/main.tf
     name: Deploy Web App
     steps:
     - name: "Checkout"
@@ -54,10 +51,12 @@ jobs:
       id: fmt
       run: terraform fmt -check
       continue-on-error: false
+      working-directory: ./WebApp/main.tf
       
     - name: Terraform Init
       id: init
       run: terraform init
+      working-directory: ./WebApp/main.tf
 
     - name: Terraform Validate
       id: validate
