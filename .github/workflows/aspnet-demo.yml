@@ -45,12 +45,9 @@ jobs:
     steps:
     - name: "Checkout"
       uses: actions/checkout@master
-    - name: Azure PowerShell Action
-      uses: Azure/powershell@v1
-      with:
-        # Specify the Az PowerShell script here.
-        inlineScript: ls
-        
+    - name: run ls
+      run: ls
+      
     - uses: hashicorp/setup-terraform@v1
 
     - name: Terraform fmt
