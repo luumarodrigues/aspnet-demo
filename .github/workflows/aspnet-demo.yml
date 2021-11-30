@@ -62,7 +62,7 @@ jobs:
 
     needs: build
     steps:
-      - name: Download Terraform
+    - name: Download Terraform
         uses: actions/download-artifact@v2
         with:
           name: terraform
@@ -73,7 +73,7 @@ jobs:
       id: fmt
       run: terraform fmt -check
       continue-on-error: false
-      
+    
     - name: Terraform Init
       id: init
       run: terraform init
