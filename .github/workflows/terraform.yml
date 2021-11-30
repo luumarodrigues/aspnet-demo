@@ -16,6 +16,12 @@ jobs:
       uses: actions/checkout@master
     - uses: hashicorp/setup-terraform@v1
 
+    - name: Upload Artfact
+      uses: actions/upload-artifact@v1
+      with:
+        name: terraform
+        path: ${{ github.workspace}}//WebApp
+
     - name: Terraform fmt
       id: fmt
       run: terraform fmt -check
