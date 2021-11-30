@@ -40,31 +40,6 @@ jobs:
     runs-on: ubuntu-18.04
     name: Deploy Web App
     steps:
-    - name: "Checkout"
-      uses: actions/checkout@master
-    - name: run ls
-      run: cd WebApp
-      
-    - uses: hashicorp/setup-terraform@v1
-
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: false
-      
-    - name: Terraform Init
-      id: init
-      run: terraform init
-
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate
-
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan
-      continue-on-error: false
-
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
