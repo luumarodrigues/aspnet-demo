@@ -57,6 +57,7 @@ jobs:
         resourceGroupName: Labs
         template: ./createappservice.json
         deploymentMode: Validate
+        failOnStdErr: false
 
   deploy:
     needs: deploy-IaC
