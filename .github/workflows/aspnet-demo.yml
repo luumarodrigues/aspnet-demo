@@ -56,7 +56,7 @@ jobs:
         region: brazilsouth
         resourceGroupName: Labs
         template: ./createappservice.json
-        deploymentMode: Incremental
+        deploymentMode: Validate
 
   deploy:
     needs: deploy-IaC
