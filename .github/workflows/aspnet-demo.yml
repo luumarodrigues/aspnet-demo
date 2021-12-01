@@ -1,14 +1,10 @@
-name: Demo Web App
+name: Demo WebApp
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
-env:
-  AZURE_WEBAPP_NAME: Demo-GithubActions    # set this to your application's name
-
 
 jobs:
   build:
@@ -44,6 +40,7 @@ jobs:
         path: '${{ github.workspace }}//WebApp'
 
   deploy-IaC:
+    needs: build
     name: Deploy Infra
     runs-on: ubuntu-latest
 
@@ -51,49 +48,21 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/WebApp
 
-    env:
-      ARM_CLIENT_ID: ${{ secrets.TF_ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.TF_ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.TF_ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.TF_ARM_TENNANT_ID }}
-
-#    environment:
- #     name: dev
-
-    needs: build
     steps:
-    - name: Download Terraform
-      uses: actions/download-artifact@v2
+    - name: Deploy Azure Resource Manager (ARM) Template
+      uses: Azure/arm-deploy@v1
       with:
-        name: terraform
-        path: ${{ github.workspace }}//WebApp
-
-    - uses: hashicorp/setup-terraform@v1
-    
-    - name: Terraform Init
-      id: init
-      run: terraform init
-
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
-
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -no-color -lock=false
-      continue-on-error: false
-
-    - name: Terraform Apply
-      id: apply
-      run: terraform apply -auto-approve -lock=false
-      continue-on-error: false
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        region: brazilsouth
+        resourceGroupName: Labs
+        template: ./createappservice.json
+        deploymentMode: Incremental
 
   deploy:
     needs: deploy-IaC
-    runs-on: ubuntu-18.04
     name: Deploy Web App
+    runs-on: ubuntu-latest
     steps:
-
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
@@ -108,5 +77,5 @@ jobs:
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        app-name: DemoGithubActions 
         package: '${{ github.workspace }}//output'
