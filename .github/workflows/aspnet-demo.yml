@@ -44,9 +44,9 @@ jobs:
     name: Deploy Infra
     runs-on: ubuntu-latest
 
-#    defaults:
-#      run:
-#        working-directory: ${{ github.workspace }}/WebApp
+    defaults:
+      run:
+        working-directory: WebApp
 
     steps:
     - name: Download artifacts
@@ -60,7 +60,7 @@ jobs:
     - name: Azure CLI Action
       uses: Azure/cli@v1
       with:
-        inlineScript: az deployment group create --resource-group Labs --template-file WebApp/createappservice.json
+        inlineScript: az deployment group create --resource-group Labs --template-file createappservice.json
 
     - name: Deploy Azure Resource Manager (ARM) Template
       uses: Azure/arm-deploy@v1
@@ -68,7 +68,7 @@ jobs:
         scope: resourcegroup 
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: Labs
-        template: ./createappservice.json
+        template: createappservice.json
         deploymentMode: Incremental
 
   deploy:
