@@ -36,13 +36,13 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: output
+        path: output/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: iac
-        path: WebApp
+        path: WebApp/
 
 #  deploy-IaC:
 #    needs: build
@@ -76,19 +76,21 @@ jobs:
     name: Deploy Web App
     runs-on: ubuntu-latest
     steps:
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact
-        path: ${{ env.AZURE_WEBAPP }}/output
+#    - name: Download artifacts
+#      uses: actions/download-artifact@v2
+#      with:
+#        name: artifact
+#        path: ${{ env.AZURE_WEBAPP }}/output
 
     - name: Azure Login
       uses: Azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
 
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
         app-name: Demo-GithubActions
         package: ${{ env.AZURE_WEBAPP }}/output
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
