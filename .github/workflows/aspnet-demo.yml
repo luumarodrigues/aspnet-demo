@@ -23,11 +23,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore
-
     - name: Build 
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP }}/output
