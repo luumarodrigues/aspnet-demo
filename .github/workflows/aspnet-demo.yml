@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  #AZURE_WEBAPP_NAME: webAppAction-wes    # set this to your application's name
+  AZURE_WEBAPP: '.'
+
+  
 jobs:
   build:
     name: Build
@@ -25,19 +30,19 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o '${{ github.workspace }}/output'
+      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP }}/output
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: '${{ github.workspace }}//output'
+        path: output
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: iac
-        path: '${{ github.workspace }}/WebApp'
+        path: WebApp
 
 #  deploy-IaC:
 #    needs: build
@@ -75,7 +80,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact
-        path: '${{ github.workspace }}//output'
+        path: ${{ env.AZURE_WEBAPP }}/output
 
     - name: Azure Login
       uses: Azure/login@v1
@@ -86,4 +91,4 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: Demo-GithubActions
-        package: '${{ github.workspace }}/output'
+        package: ${{ env.AZURE_WEBAPP }}/output
