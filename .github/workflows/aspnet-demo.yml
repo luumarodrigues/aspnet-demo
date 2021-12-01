@@ -49,8 +49,12 @@ jobs:
         working-directory: ${{ github.workspace }}/WebApp
 
     steps:
-    - name: run ls
-      run: ls
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: '${{ github.workspace }}//WebApp'
+        
     - name: Azure CLI Action
       uses: Azure/cli@v1
       with:
