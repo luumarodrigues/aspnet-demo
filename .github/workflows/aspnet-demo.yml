@@ -31,13 +31,13 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: '${{ github.workspace }}//output'
+        path: '${{ github.workspace }}/output'
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: iac
-        path: '${{ github.workspace }}//WebApp'
+        path: '${{ github.workspace }}/WebApp'
 
 #  deploy-IaC:
 #    needs: build
@@ -74,7 +74,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: artifact
-        path: '${{ github.workspace }}//output'
+        path: '${{ github.workspace }}/output'
 
     - name: Azure Login
       uses: Azure/login@v1
