@@ -23,8 +23,11 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
+    - name: Install dependencies
+      run: dotnet restore
+      
     - name: Build 
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP }}/output
@@ -51,7 +54,7 @@ jobs:
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: Demo-GithubActions
+        app-name: Demo-GithubActions32
         package: ${{ env.AZURE_WEBAPP }}/output
 
 #  deploy-IaC:
