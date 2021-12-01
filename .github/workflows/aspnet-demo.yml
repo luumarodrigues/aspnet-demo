@@ -52,13 +52,11 @@ jobs:
     - name: Deploy Azure Resource Manager (ARM) Template
       uses: Azure/arm-deploy@v1
       with:
-        scope: resourcegroup 
+#        scope: resourcegroup 
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        region: brazilsouth
         resourceGroupName: Labs
         template: ./createappservice.json
-        deploymentMode: Validate
-        failOnStdErr: false
+        deploymentMode: Incremental
 
   deploy:
     needs: deploy-IaC
