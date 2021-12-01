@@ -49,14 +49,10 @@ jobs:
         working-directory: ${{ github.workspace }}/WebApp
 
     steps:
-    - name: Deploy Azure Resource Manager (ARM) Template
-      uses: Azure/arm-deploy@v1
+    - name: Azure CLI Action
+      uses: Azure/cli@v1
       with:
-        scope: resourcegroup 
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: Labs
-        template: ./createappservice.json
-        deploymentMode: Incremental
+        inlineScript: az deployment group create --resource-group Labs --template-file createappservice.json
 
   deploy:
     needs: deploy-IaC
