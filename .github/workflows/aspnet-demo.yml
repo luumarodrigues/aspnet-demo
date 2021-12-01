@@ -44,16 +44,16 @@ jobs:
     name: Deploy Infra
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/WebApp
+#    defaults:
+#      run:
+#        working-directory: ${{ github.workspace }}/WebApp
 
-    steps:
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: iac
-        path: '${{ github.workspace }}//WebApp'
+ #   steps:
+ #   - name: Download artifacts
+ #     uses: actions/download-artifact@v2
+ #     with:
+ #       name: iac
+ #       path: '${{ github.workspace }}//WebApp'
         
     - name: Azure CLI Action
       uses: Azure/cli@v1
