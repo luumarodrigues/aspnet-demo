@@ -86,4 +86,4 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: Demo-GithubActions
-        package: '${{ github.workspace }}//output'
+        package: '${{ github.workspace }}/output'
