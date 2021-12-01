@@ -67,6 +67,7 @@ jobs:
 
   deploy:
 #    needs: deploy-IaC
+    needs: build
     name: Deploy Web App
     runs-on: ubuntu-latest
     steps:
