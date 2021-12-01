@@ -52,6 +52,7 @@ jobs:
     - name: Deploy Azure Resource Manager (ARM) Template
       uses: Azure/arm-deploy@v1
       with:
+        scope: resourcegroup 
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         region: brazilsouth
         resourceGroupName: Labs
