@@ -58,7 +58,7 @@ jobs:
     - name: Azure CLI Action
       uses: Azure/cli@v1
       with:
-        inlineScript: az deployment group create --resource-group Labs --template-file createappservice.json
+        inlineScript: az deployment group create --resource-group Labs --template-file /WebApp/createappservice.json
 
     - name: Deploy Azure Resource Manager (ARM) Template
       uses: Azure/arm-deploy@v1
