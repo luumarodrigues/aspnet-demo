@@ -55,7 +55,7 @@ jobs:
         name: iac
         path: '${{ github.workspace }}//WebApp'
     - name: run ls
-      run: ls
+      run: ls WebApp
       
     - name: Azure CLI Action
       uses: Azure/cli@v1
