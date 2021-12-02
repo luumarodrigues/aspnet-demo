@@ -53,6 +53,7 @@
         },
         "kind": "linux",
         "properties": {
+          "mode": "Incremental"
           "reserved": true
         }
       },
@@ -66,6 +67,7 @@
           "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]"
         ],
         "properties": {
+          "mode": "Incremental"
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanPortalName'))]",
           "siteConfig": {
             "linuxFxVersion": "[parameters('linuxFxVersion')]"
@@ -81,6 +83,7 @@
                 "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
               ],
               "properties": {
+                "mode": "Incremental"
                 "repoUrl": "[parameters('repoUrl')]",
                 "branch": "master",
                 "isManualIntegration": true
