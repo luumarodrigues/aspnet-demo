@@ -35,25 +35,41 @@ jobs:
       with:
         name: artifact
         path: output/
-
+        
   deploy:
     needs: build
     name: Deploy Web App
     runs-on: ubuntu-latest
     steps:
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.10
       with:
         name: artifact
         path: ${{ env.AZURE_WEBAPP }}/output
 
-    - name: Azure Login
-      uses: Azure/login@v1
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v2
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: 'Deploy to Azure WebApp'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: Demo-githubactions02
+        app-name: Demo-githubactions01
+        publish-profile: ${{ secret.PUBLISH_PROFILE }}
         package: ${{ env.AZURE_WEBAPP }}/output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
