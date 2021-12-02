@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 env:
-  #AZURE_WEBAPP_NAME: webAppAction-wes    # set this to your application's name
   AZURE_WEBAPP: '.'
 
   
@@ -43,49 +42,35 @@ jobs:
       with:
         name: iac
         path: WebApp/
-        
+
+  deploy-IaC:
+    needs: build
+    name: Deploy Infra
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download artifacts
+     uses: actions/download-artifact@v2
+      with:
+        name: iac
+        path: '${{ github.workspace }}//WebApp'
+
     - name: Azure Login
       uses: Azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true
 
-
-    - name: 'Deploy to Azure WebApp'
-      uses: azure/webapps-deploy@v2
+    - name: Deploy Azure Resource Manager (ARM) Template
+      uses: Azure/arm-deploy@v1
       with:
-        app-name: GithubActionsDemonio
-        package: ${{ env.AZURE_WEBAPP }}/output
-
-#  deploy-IaC:
-#    needs: build
-#    name: Deploy Infra
-#    runs-on: ubuntu-latest
-#    
-#    steps:
-#    - name: Download artifacts
-#     uses: actions/download-artifact@v2
-#      with:
-#        name: iac
-#        path: '${{ github.workspace }}//WebApp'
-#
-#    - name: Azure Login
-#      uses: Azure/login@v1
- #     with:
- #       creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-#    - name: Deploy Azure Resource Manager (ARM) Template
-#      uses: Azure/arm-deploy@v1
-#      with:
-#        scope: resourcegroup 
-#        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-#        resourceGroupName: Labs
-#        template: WebApp/createappservice.json
-#        deploymentMode: Incremental
+        scope: resourcegroup 
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: Labs
+        template: WebApp/createappservice.json
+        deploymentMode: Incremental
 
   deploy:
-#    needs: deploy-IaC
-    needs: build
+    needs: deploy-IaC
     name: Deploy Web App
     runs-on: ubuntu-latest
     steps:
@@ -94,3 +79,15 @@ jobs:
       with:
         name: artifact
         path: ${{ env.AZURE_WEBAPP }}/output
+
+    - name: Azure Login
+      uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
+
+    - name: 'Deploy to Azure WebApp'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: GithubActionsDemonio
+        package: ${{ env.AZURE_WEBAPP }}/output

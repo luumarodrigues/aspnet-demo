@@ -4,7 +4,7 @@
     "parameters": {
       "webAppName": {
         "type": "string",
-        "defaultValue": "Demo-GithubActions",
+        "defaultValue": "GithubActionsDemonio",
         "minLength": 2,
         "metadata": {
           "description": "Web app name." 
