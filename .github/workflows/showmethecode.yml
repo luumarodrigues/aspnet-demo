@@ -8,21 +8,22 @@ on:
 
 env:
   AZURE_WEBAPP: '.'
-
+  
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+    - name: Checkout
+      uses: actions/checkout@v2.4.2
+      
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2.1.0
       with:
         dotnet-version: 5.0.x
         
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore 
       
     - name: Build 
       run: dotnet build --configuration Release --no-restore
@@ -30,23 +31,24 @@ jobs:
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP }}/output
     
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v1
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: artifact
         path: output/
-    
+
   deploy:
     needs: build
     name: Deploy Web App
     runs-on: ubuntu-latest
     steps:
+    
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: artifact
           path: '${{ env.AZURE_WEBAPP }}/output'
-      
+          
       - name: Azure Login
         uses: Azure/login@v1
         with:
@@ -57,6 +59,17 @@ jobs:
         with:
           app-name: aspnet-lab
           package: ${{ env.AZURE_WEBAPP }}/output
+          
+
+        
+
+    
+      
+    
+    
+        
+    
+
 
 
 
