@@ -1,4 +1,4 @@
-name: Demo WebApp
+name: Demo WebApp ShowMeTheCode
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 env:
   AZURE_WEBAPP: '.'
-  
+
 jobs:
   build:
     name: Build
@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-
+        
     - name: Install dependencies
       run: dotnet restore
       
@@ -29,13 +29,34 @@ jobs:
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP }}/output
-
+    
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: artifact
         path: output/
-
+    
+  deploy:
+    needs: build
+    name: Deploy Web App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: '${{ env.AZURE_WEBAPP }}/output'
+      
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: aspnet-lab
+          package: ${{ env.AZURE_WEBAPP }}/output
 
 
 
