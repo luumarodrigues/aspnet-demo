@@ -33,21 +33,14 @@ jobs:
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
       working-directory: ./
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:   
-    #login acr
-    - name: Docker Login
-      uses: docker/login-action@v2.0.0
-      with:
-        registry: ${{ env.REGISTRY_NAME }}.azurecr.io
-        username: ${{ secrets.REGISTRY_USERNAME }} 
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:   
         
     # Create namespace if doesn't exist
     - run: |
-        kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f -  
+        kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f  
 
     # Create image pull secret for ACR
     - uses: azure/k8s-create-secret@v1
