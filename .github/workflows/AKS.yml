@@ -1,10 +1,10 @@
 name: CI/CD AKS
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: workflow_dispatch
+#  push:
+#    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
 
 env:
   REGISTRY_NAME: ACRDEMO02
