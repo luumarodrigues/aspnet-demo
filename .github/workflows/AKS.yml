@@ -9,9 +9,6 @@ on:
 
 env:
   REGISTRY_NAME: ACRDEMO02
-  CLUSTER_NAME: AKSDEMO
-  CLUSTER_RESOURCE_GROUP: Labs-rg
-  NAMESPACE: demo-actions
   APP_NAME: aspnet-lab
 
 jobs:
@@ -33,23 +30,18 @@ jobs:
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
       working-directory: ./
 
-#  deploy:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:   
-    
-    # Create namespace if doesn't exist
-    - run: |
-        kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f -
-
-    # Deploy app to AKS
-    - uses: azure/k8s-deploy@v1
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:   
+    - name: Azure Login
+      uses: Azure/login@v1
       with:
-        manifests: |
-          ${{ github.workspace }}/manifests/deployment.yaml
-          ${{ github.workspace }}/manifests/service.yaml
-        images: |
-          ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
-        imagepullsecrets: |
-          ${{ env.AZURE_CREDENTIALS }}
-        namespace: ${{ env.NAMESPACE }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+       
+    - name: Deploy Azure WebApp
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_NAME }}
+        images: '${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest'
+
