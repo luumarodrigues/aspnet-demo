@@ -55,7 +55,7 @@ jobs:
       - name: Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
-          app-name: DemoWebAppWorkshop
+          app-name: aspnet-lab
           package: ${{ env.AZURE_WEBAPP }}/output
 
 
