@@ -1,4 +1,4 @@
-name: CI/CD AKS
+name: WebApp Docker
 
 on: 
   push:
