@@ -1,10 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /app
+WORKDIR /source
 
 # copy csproj and restore as distinct layers
 COPY . /app
 RUN dotnet restore
-RUN dotnet publish -c Release -o out apsnetapp
 
 # copy everything else and build app
 COPY aspnetapp/. ./aspnetapp/
