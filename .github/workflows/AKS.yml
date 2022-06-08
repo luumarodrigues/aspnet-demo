@@ -42,5 +42,5 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ env.APP_NAME }}
-        images: '${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest'
+        images: '${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}'
 
