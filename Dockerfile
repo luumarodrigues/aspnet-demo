@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /app
-
+EXPOSE 5000
 # Copy everything
 COPY . ./
 # Restore as distinct layers
