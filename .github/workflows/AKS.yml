@@ -47,7 +47,7 @@ jobs:
         container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        secret-name: ${{ env.SECRET }}
+        secret-name: ${{ env.AZURE_CREDENTIALS }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
 
@@ -60,5 +60,5 @@ jobs:
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
         imagepullsecrets: |
-          ${{ env.SECRET }}
+          ${{ env.AZURE_CREDENTIALS }}
         namespace: ${{ env.NAMESPACE }}
