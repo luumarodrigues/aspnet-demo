@@ -17,18 +17,18 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-#    - name: Docker Login
-#      uses: docker/login-action@v2.0.0
-#      with:
-#        registry: ${{ env.REGISTRY_NAME }}.azurecr.io
-#        username: ${{ secrets.REGISTRY_USERNAME }} 
-#        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: Docker Login
+      uses: docker/login-action@v2.0.0
+      with:
+        registry: ${{ env.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }} 
+        password: ${{ secrets.REGISTRY_PASSWORD }}
          
-#    - name: Build and push Docker image
-#      run: |
-#        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
-#        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
-#      working-directory: ./
+    - name: Build and push Docker image
+      run: |
+        docker build . -t ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:latest
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:latest
+      working-directory: ./
 
   deploy:
     needs: build
