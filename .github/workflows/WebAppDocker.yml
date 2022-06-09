@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY_NAME: ACRDEMO02
   REPOSITORY_NAME: teste010102
-  APP_NAME: aspnet-lab
+  APP_NAME: teste010102
 
 jobs:
   build:
