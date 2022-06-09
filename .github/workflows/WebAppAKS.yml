@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: deploy-aks
-        path: ./deploy-aks.yml
+        path: deploy-aks.yml
 
   deploy:
     needs: build
@@ -48,7 +48,7 @@ jobs:
       uses: actions/download-artifact@v3.0.0
       with:
         name: deploy-aks
-        path: ./deploy-aks.yml
+        path: ./deploy-aks
     
     - uses: azure/aks-set-context@v1
       with:
@@ -72,15 +72,13 @@ jobs:
         
 
     - run: |
-        ls
-        cd ..
-        ls 
+        cat ./deploy.yml
     
     # Deploy app to AKS
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          ./deploy-aks.yml
+          ./deploy-aks/deploy-aks.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:${{ github.sha }}
         imagepullsecrets: |
