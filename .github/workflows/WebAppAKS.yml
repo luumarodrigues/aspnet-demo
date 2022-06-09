@@ -69,11 +69,7 @@ jobs:
         secret-name: ${{ env.SECRET }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
-        
 
-    - run: |
-        cat ./deploy.yml
-    
     # Deploy app to AKS
     - uses: azure/k8s-deploy@v1
       with:
