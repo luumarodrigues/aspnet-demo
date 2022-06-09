@@ -5,7 +5,7 @@ metadata:
   labels:
     app: aspnet-lab
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       service: webapp
@@ -17,16 +17,14 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: exploredocker.azurecr.io/webapp:v1
+          image: acrdemo02.azurecr.io/aspnet-lab:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 5000
               protocol: TCP
           env:
             - name: ASPNETCORE_URLS
-              value: http://+:80
-            - name: WebApiBaseAddress
-              value: http://webapi
+              value: http://+:5000
 ---
 apiVersion: v1
 kind: Service
@@ -39,7 +37,7 @@ spec:
   type: LoadBalancer
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 5000
       protocol: TCP
   selector:
     service: webapp
