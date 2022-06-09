@@ -34,10 +34,22 @@ jobs:
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:${{ github.sha }}
       working-directory: ./
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: deploy-aks
+        path: ./deploy-aks.yml
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:   
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: deploy-aks
+        path: ./deploy-aks.yml
+    
     - uses: azure/aks-set-context@v1
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
@@ -62,7 +74,7 @@ jobs:
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          ${{ github.workspace }}/deploy-aks.yml
+          ./deploy-aks/deploy-aks.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:${{ github.sha }}
         imagepullsecrets: |
