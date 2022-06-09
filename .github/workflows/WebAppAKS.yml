@@ -72,6 +72,7 @@ jobs:
         
 
     - run: |
+        ls
         cd ..
         ls 
     
@@ -79,7 +80,7 @@ jobs:
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          deploy-aks.yml
+          ./deploy-aks.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.REPOSITORY_NAME }}:${{ github.sha }}
         imagepullsecrets: |
