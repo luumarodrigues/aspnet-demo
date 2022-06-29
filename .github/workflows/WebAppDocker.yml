@@ -7,8 +7,8 @@ on:
     branches: [ "master" ]
 
 env:
-  REGISTRY_NAME: ACRDEMO02
-  REPOSITORY_NAME: teste010102
+  REGISTRY_NAME: aspnetlab
+  REPOSITORY_NAME: aspnetlab
   APP_NAME: aspnet-lab
 
 jobs:
@@ -37,7 +37,10 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+#        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
        
     - name: Deploy Azure WebApp
       uses: Azure/webapps-deploy@v2
