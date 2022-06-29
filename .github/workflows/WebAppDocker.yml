@@ -31,6 +31,7 @@ jobs:
       working-directory: ./
 
   deploy:
+    environment: dev
     needs: build
     runs-on: ubuntu-latest
     steps:   
